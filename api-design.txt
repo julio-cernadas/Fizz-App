@@ -1,0 +1,123 @@
+
+# ---------------------------------------------------------------------------- #
+#                               API DESIGN GUIDE                               #
+# ---------------------------------------------------------------------------- #
+# ================================ TERMINOLOGY =============================== #
+- Resource -> an object which that has some associated data to it and as well as a set of methods
+to operate on it. Ex: Posts, users, animals are resources and CRUD operations can be performed on them.
+
+- Collections -> are a set of resources. Ex: Companies is the collection of a Company resource.
+
+- URL -> the path through which a resource can be located and some action performed on it.
+
+
+# ======================== THE SIX CONTRAINTS OF REST ======================== #
+- Client-Server -> there will exists a client communicating with a server.
+
+- Cacheable -> a response from a server can define itself as cacheable or not.
+
+- Stateless -> all the state provided for a given web request is contained within the request itself.
+    * Thus the server does not store anything, it is simply an interface.
+
+- Layered -> the response to a request can come from a web server, load balancer, cache server, cdn, etc.
+    * The client doesn't care where it gets its data from, as long as it gets what it asks for.
+
+- Code-on-Demand (optional) -> on demand a server can send additional code to the client.
+
+- Uniform Interface -> this consists of 4 sub-constraints...
+    a. Resource Identification -> a given resource can be identified by a URL.
+        ~ GET /employees/1234 => ouputs a resource representation.
+    b. Resource Manipulation with Representation ->
+        ~ PUT /employees/1234 + a JSON body => resource representations can be used to change data.
+    c. Self-Descriptive -> server tells the client what kind of content is being sent back
+        ~ Content-Type: application/json
+    d. HATEOS -> hypermedia as the engine of application state.
+
+
+# ================================ PRINCIPLES ================================ #
+- Documentation is a REQUIREMENT!
+    * Include the following:
+        ~ Endpoints - as well as all their HTTP methods.
+        ~ Parameters
+        ~ Schema - of the data you'll be sending.
+        ~ Formatting - specify which type of data format your expecting.
+        ~ Errors - how to fix errors or manage exceptions.
+
+- The URL is a sentence, where resources are nouns and HTTP methods are verbs!
+    * Use Plural Nouns in the URL. -> ex. http://localhost:3000/api/movies
+    * Let the HTTP verbs define the action we'll be using. -> ex. GET, POST, PUT, DELETE.
+
+- Version your APIs. -> http://localhost:3000/api/v2/cars
+    * Can also uses headers for this rather than stating the version in the URL.
+
+- Use HTTP methods according to the specific action which needs to be performed.
+    * Don't use a GET request to delete or mutate content!
+    * Safe methods like GET are intended for retrieving data and shouldn't change the state
+    of resources on a server. Thus the request should remain read-only.
+
+- Depict resources hierarchy through the URL. -> ex. api/v1/users/3300121/posts/4
+    * If resources contain sub-resources, make sure to depict this in the API to make it
+    more clear and explicit in relation to the logic.
+    * ex. -> Resources under resources could be the Employees of a Company. So we could use...
+        ~ GET /companies/3/employees - get the list of all employees from company 3
+        ~ GET /companies/3/employees/45 - get the details of employee 45 from company 3
+
+- Return Representation!
+    * Applies to POST, PUT, PATCH methods:
+        ~ Always return the updated resource as a response, including its URL in the Location header.
+        ~ Also Send the appropriate status code, for example a status code 201 if resource
+        is created after using a POST method.
+
+- Send HTTP status codes. -> ex. 2xx Success, 3xx Redirection, 4xx Client Errors, 5xx Server Errors
+    * Ensure that you are handling errors with their appropriate code.
+        ~ Add personalized app-specific error message wherever possible!
+    * HOWEVER, don't get carried away, you should not be using more than 10 HTTP status codes.
+
+- Accept searching, sorting, filtering params for your GET requests!
+    * Searching ->  GET /companies?search=Facebook
+    * Sorting   ->  GET /companies?sort=rank_asc
+    * Filtering ->  GET /companies?category=banking&location=india
+
+- Apply Pagination/Fragmentation!
+    * Pagination -> when a dataset is too large, we divide the data set into smaller chunks, which helps
+    in improving the performance and is easier to handle the response. ex. -> GET /companies?page=23&pageSize=100
+        ~ Types of pagination: Limit/Offset, Keyset, Seek
+
+- Validate. Validate. Validate. Assume all data you're receiving is bad, until it's been validated!
+    * Separte validation logic from your route object.
+
+- Field name casing convention! Stick to one case, and keep it consistent across all your code:
+    * Your Options:
+        ~ camelCase (recommended)
+        ~ PascalCase
+        ~ snack_case
+        ~ kebab-case
+
+- Implement Authorization + Authentication!
+
+- Implement proper Error + Exception handling!
+
+- Always check for security hazards -> check for DDoS Attacks, SQL Injection, etc
+
+- Use HTTPS/SSL before releasing to production.
+
+- Apply HATEOS when possible.
+    * Is a request response stating what the client can do next using reference links.
+
+- Add API testing!
+
+
+# ======================== PLANNING, MODELING & DESIGN ======================= #
+- REMEMBER THIS:
+    * API Design is User Experience for Developers... so make it simple, consistent, and effective.
+    * Don't get creative. Provide what is necessary, no more, no less.
+    * KISS - Keep it Stupidly Simple!
+    * Don't worry about the tools!
+    * It doesn't count unless it's written down. The initial models will eventually become your documentation.
+
+- Create diagrams
+
+
+
+
+
