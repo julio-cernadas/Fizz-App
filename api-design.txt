@@ -15,9 +15,11 @@ to operate on it. Ex: Posts, users, animals are resources and CRUD operations ca
 - Client-Server -> there will exists a client communicating with a server.
 
 - Cacheable -> a response from a server can define itself as cacheable or not.
+    * GET, PUT and DELETE are considered safe, so they can be cached. POST on the other hand can't be cached.
+    * Use eTags as they are built for cache signaling.
 
 - Stateless -> all the state provided for a given web request is contained within the request itself.
-    * Thus the server does not store anything, it is simply an interface.
+    * Each requests stands on its own. Thus the server does not store anything, it is simply an interface.
 
 - Layered -> the response to a request can come from a web server, load balancer, cache server, cdn, etc.
     * The client doesn't care where it gets its data from, as long as it gets what it asks for.
@@ -27,11 +29,14 @@ to operate on it. Ex: Posts, users, animals are resources and CRUD operations ca
 - Uniform Interface -> this consists of 4 sub-constraints...
     a. Resource Identification -> a given resource can be identified by a URL.
         ~ GET /employees/1234 => ouputs a resource representation.
-    b. Resource Manipulation with Representation ->
+    b. Resource Manipulation through Representation.
         ~ PUT /employees/1234 + a JSON body => resource representations can be used to change data.
-    c. Self-Descriptive -> server tells the client what kind of content is being sent back
-        ~ Content-Type: application/json
+    c. Self-Descriptive -> server tells the client what kind of content is being sent back.
+        ~ Is that resource cacheable?
+        ~ How to process the response? Ex. 'Content-Type: application/json'.
+        ~ How to request the next resource?
     d. HATEOS -> hypermedia as the engine of application state.
+        ~ Provides a reference as to the next actions available in the resource hierarchy.
 
 
 # ================================ PRINCIPLES ================================ #
@@ -57,7 +62,7 @@ to operate on it. Ex: Posts, users, animals are resources and CRUD operations ca
 
 - Depict resources hierarchy through the URL. -> ex. api/v1/users/3300121/posts/4
     * If resources contain sub-resources, make sure to depict this in the API to make it
-    more clear and explicit in relation to the logic.
+    more clear and explicit in relation to the logic. This is also known as sub-collections.
     * ex. -> Resources under resources could be the Employees of a Company. So we could use...
         ~ GET /companies/3/employees - get the list of all employees from company 3
         ~ GET /companies/3/employees/45 - get the details of employee 45 from company 3
@@ -65,13 +70,18 @@ to operate on it. Ex: Posts, users, animals are resources and CRUD operations ca
 - Return Representation!
     * Applies to POST, PUT, PATCH methods:
         ~ Always return the updated resource as a response, including its URL in the Location header.
-        ~ Also Send the appropriate status code, for example a status code 201 if resource
+        ~ Also send the appropriate status code, for example a status code 201 if resource
         is created after using a POST method.
 
-- Send HTTP status codes. -> ex. 2xx Success, 3xx Redirection, 4xx Client Errors, 5xx Server Errors
+- Most important headers for your API are:
+    * Status -> the response code of what you are trying to accomplish.
+    * Content-Type -> identifies the type of payload being passed back by the server
+    * Media-Type -> describes the actual structure of the payload and how things work together.
+
+- Send HTTP status codes. -> ex. 1xx Info, 2xx Success, 3xx Redirection, 4xx Client Errors, 5xx Server Errors
     * Ensure that you are handling errors with their appropriate code.
-        ~ Add personalized app-specific error message wherever possible!
-    * HOWEVER, don't get carried away, you should not be using more than 10 HTTP status codes.
+        ~ Add personalized app-specific error messages if possible, but never make your own status codes!
+    * HOWEVER, don't get carried away, you should not be using more than 10 HTTP status codes per API.
 
 - Accept searching, sorting, filtering params for your GET requests!
     * Searching ->  GET /companies?search=Facebook
@@ -84,13 +94,13 @@ to operate on it. Ex: Posts, users, animals are resources and CRUD operations ca
         ~ Types of pagination: Limit/Offset, Keyset, Seek
 
 - Validate. Validate. Validate. Assume all data you're receiving is bad, until it's been validated!
-    * Separte validation logic from your route object.
+    * Separate validation logic from your route objects. Thus place validiation in separte objects.
 
 - Field name casing convention! Stick to one case, and keep it consistent across all your code:
     * Your Options:
-        ~ camelCase (recommended)
+        ~ camelCase     (recommended)
+        ~ snack_case    (second favorite)
         ~ PascalCase
-        ~ snack_case
         ~ kebab-case
 
 - Implement Authorization + Authentication!
@@ -101,23 +111,46 @@ to operate on it. Ex: Posts, users, animals are resources and CRUD operations ca
 
 - Use HTTPS/SSL before releasing to production.
 
-- Apply HATEOS when possible.
-    * Is a request response stating what the client can do next using reference links.
-
 - Add API testing!
 
 
 # ======================== PLANNING, MODELING & DESIGN ======================= #
-- REMEMBER THIS:
-    * API Design is User Experience for Developers... so make it simple, consistent, and effective.
-    * Don't get creative. Provide what is necessary, no more, no less.
-    * KISS - Keep it Stupidly Simple!
+- Key Points:
+    * API Design is User Experience but for Developers... so make it simple, consistent, and effective.
+    * Don't get creative. Provide what is necessary... no more... no less.
+    * KISS - Keep it Simple, Stupid!
     * Don't worry about the tools!
     * It doesn't count unless it's written down. The initial models will eventually become your documentation.
+    * Start off by writing your resouces on note cards, paper or a white board.
 
-- Create diagrams
-
-
-
-
-
+- Planning Process -> a continous process of revision and improvement. You'll re-iterate these steps various times!
+    1. Identify participants.
+        ~ Who they are?
+        ~ Are they internal or external to the organization?
+        ~ Short description of who they are.
+    2. Identify activites.
+        ~ Focus on the interactions between every participant and the system.
+    3. Break activites into steps!
+        ~ Revise activities and extract the detailed actions/steps.
+    4. Create API definition.
+        ~ Document and build by following these steps:
+            a. Identify the resources - understand the resources the application will need.
+                * ex. Items Resouce -> List items, View items, Search items, Add/Edit items, Remove items.
+                * ex. Orders Resource -> List orders, Obtain order status, Cancel orders.
+            b. Map activites to resource lifecycle - map actions to HTTP nouns and verbs.
+                * Create a chart diagram for each resource, include the activite/actions and verb/noun mapping.
+            c. Mapping remaining activities to custom actions
+                * Determine resource relationships:
+                    • Independent - resources may exists regardless of each other, but they may reference each other.
+                    • Dependent - one resource cannot exists without the other.
+                    • Associative - independent but the relationship contains additional properties to describe it.
+                * Determine the appropriate resource hierachy structure:
+                    • /movies/:id/actors
+                    • /movies/:id/characters
+                    • /movies/:id/characters/:id
+                    • /actors/:id/characters/
+                    • /actors/:id/characters/:id
+    5. Validate your API.
+        ~ Write each resource's actions on notecards.
+        ~ Use notecards to map out each flow, action, etc.
+        ~ Fill any gaps, assign them to resources as appropriate.
