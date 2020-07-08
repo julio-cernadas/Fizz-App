@@ -1,4 +1,3 @@
-
 # ---------------------------------------------------------------------------- #
 #                               API DESIGN GUIDE                               #
 # ---------------------------------------------------------------------------- #
@@ -119,13 +118,14 @@ to operate on it. Ex: Posts, users, animals are resources and CRUD operations ca
     * API Design is User Experience but for Developers... so make it simple, consistent, and effective.
     * Don't get creative. Provide what is necessary... no more... no less.
     * KISS - Keep it Simple, Stupid!
-    * Don't worry about the tools!
+    * Don't worry about the tools! Just get the ideas down and flowing!
     * It doesn't count unless it's written down. The initial models will eventually become your documentation.
     * Start off by writing your resouces on note cards, paper or a white board.
 
-- Planning Process -> a continous process of revision and improvement. You'll re-iterate these steps various times!
+- Planning Process:
+    * This is a continous stream of revision and improvement. Re-iterate these steps various times!
     1. Identify participants.
-        ~ Who they are?
+        ~ Who are they?
         ~ Are they internal or external to the organization?
         ~ Short description of who they are.
     2. Identify activites.
