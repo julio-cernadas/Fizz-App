@@ -1,8 +1,8 @@
 {
-    "name": "mern-skeleton",
-    "version": "2.0.0",
-    "description": "A MERN stack skeleton web application",
-    "author": "Shama Hoque",
+    "name": "fizz",
+    "version": "0.0.1",
+    "description": "Social media app based on style, fashion, outfits and recommendations! Uses MERN tech stack.",
+    "author": "Julio Cernadas",
     "license": "MIT",
     "keywords": [
         "react",
@@ -13,9 +13,9 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/shamahoque/mern-skeleton.git"
+        "url": "https://github.com/julio-cernadas/outfits_app.git"
     },
-    "homepage": "https://github.com/shamahoque/mern-skeleton",
+    "homepage": "",
     "main": "./dist/server.generated.js",
     "scripts": {
         "development": "nodemon",
