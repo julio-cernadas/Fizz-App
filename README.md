@@ -1,1 +1,2 @@
-# outfits_app
+# mern-skeleton
+skeleton architecture for mern application
