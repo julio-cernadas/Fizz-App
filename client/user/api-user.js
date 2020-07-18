@@ -8,7 +8,7 @@ const create = async (user) => {
     try {
         // fetch to make a POST call at the create API route, '/api/users', to
         // create a new user in the backend with the provided data.
-        let response = await fetch('/api/users/', {
+        let response = await fetch('/api/v1/users/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -30,7 +30,7 @@ const list = async (signal) => {
         // The list method will use fetch to make a GET call to retrieve all
         // the users in the database, and then return the response from the
         // server as a promise to the component.
-        let response = await fetch('/api/users/', {
+        let response = await fetch('/api/v1/users/', {
             method: 'GET',
             signal: signal,
         })
@@ -50,7 +50,7 @@ const read = async (params, credentials, signal) => {
         // the user ID as a parameter, the requesting component must also provide
         // valid credentials, which, in this case, will be a valid JWT received
         // after a successful sign-in.
-        let response = await fetch('/api/users/' + params.userId, {
+        let response = await fetch('/api/v1/users/' + params.userId, {
             method: 'GET',
             signal: signal,
             headers: {
@@ -75,7 +75,7 @@ const update = async (params, credentials, user) => {
         // for a specific user, then use fetch to make a PUT call to update the
         // existing user in the backend. This is also a protected route that will
         // require a valid JWT as the credential.
-        let response = await fetch('/api/users/' + params.userId, {
+        let response = await fetch('/api/v1/users/' + params.userId, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -94,7 +94,7 @@ const remove = async (params, credentials) => {
     try {
         // This, again, is a protected route that will require a valid JWT as a
         // credential, similar to the read and update methods.
-        let response = await fetch('/api/users/' + params.userId, {
+        let response = await fetch('/api/v1/users/' + params.userId, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
