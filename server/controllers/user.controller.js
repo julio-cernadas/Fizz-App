@@ -13,99 +13,85 @@ import errorHandler from "./../helpers/dbErrorHandler";
 
 import log from "./../../utils/webpack-logger";
 
-
 //* -------------------------------------------------------------------------- */
-//*                             ROUTE - /api/users                             */
+//*                               ROUTE - /users                               */
 //* -------------------------------------------------------------------------- */
 // * GET METHOD - Load users
-const list = async (req, res) => {
+const list = async (req, res, next) => {
     try {
+        // 'getUsers' returns a promise since it is an async function!
         const users = await userServices.getUsers();
         res.json(users);
     } catch (err) {
-        return res.status(400).json({
-            error: errorHandler.getErrorMessage(err),
-        });
+        next(err);
     }
 };
 
 // * POST METHOD - Create a new user
-const create = async (req, res) => {
+const create = async (req, res, next) => {
     try {
         const userData = req.body;
-        userServices.createUser(userData);
+        await userServices.createUser(userData);
         return res.status(200).json({
             message: "Successfully signed up!",
         });
     } catch (err) {
-        return res.status(400).json({
-            error: errorHandler.getErrorMessage(err),
-        });
+        next(err);
     }
 };
 
 //* -------------------------------------------------------------------------- */
-//*                         ROUTE - /api/users/:userId                         */
+//*                           ROUTE - /users/:userId                           */
 //* -------------------------------------------------------------------------- */
-// * GET METHOD - read user details by userId
-const read = (req, res) => {
-    // This retrieves the user details from req.profile and removes sensitive
-    // info, such as the hashed_password and salt values, before sending response
-    const userProfile = req.profile;
-    log.info("Reading user profile data!")
-    userServices.removeSensitiveInfo(userProfile);
-    return res.json(userProfile);
-};
-
-// * PUT METHOD - update a user's details by userId
-const update = async (req, res) => {
-    try {
-        let { profile: user, body: updatedData } = req;
-        await userServices.updateUser(user, updatedData);
-        res.json(user);
-    } catch (err) {
-        return res.status(400).json({
-            error: errorHandler.getErrorMessage(err),
-        });
-    }
-};
-
-// * DELETE METHOD - remove a user by userId
-const remove = async (req, res) => {
-    try {
-        // This function retrieves the user from req.profile
-        let user = req.profile;
-
-        // Then uses the remove() query to delete the user from the database.
-        let deletedUser = await user.remove();
-
-        // On successful deletion, the requesting client is returned the deleted user object in the response.
-        deletedUser.hashed_password = undefined;
-        deletedUser.salt = undefined;
-        res.json(deletedUser);
-    } catch (err) {
-        return res.status(400).json({
-            error: errorHandler.getErrorMessage(err),
-        });
-    }
-};
-
-// * PARAMS - used for ':userId'
+// * PROCESS PARAMS -> ':userId'
 // The userByID controller function uses the value in the :userId parameter
 // to query the database by _id and load the matching user's details.
 const userByID = async (req, res, next, id) => {
     try {
-        let user = await User.findById(id);
-        if (!user)
-            return res.status("400").json({
-                error: "User not found",
-            });
-        req.profile = user;
+        const userID = id;
+        req.profile = await userServices.findUser(userID);
         next();
     } catch (err) {
         return res.status("400").json({
             error: "Could not retrieve user",
         });
+    }
+};
+
+// * GET METHOD - read user details by userId
+// This retrieves the user details from req.profile and removes sensitive
+// info, such as the hashed_password and salt values, before sending response
+const read = (req, res, next) => {
+    try {
+        const userProfile = req.profile;
+        log.info("Reading user profile data!");
+        userServices.removeSensitiveInfo(userProfile);
+        return res.json(userProfile);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// * PUT METHOD - update a user's details by userId
+const update = async (req, res, next) => {
+    try {
+        let { profile: user, body: updatedData } = req;
+        await userServices.updateUser(user, updatedData);
+        res.json(user);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// * DELETE METHOD - remove a user by userId
+// This function retrieves the user from req.profile
+const remove = async (req, res, next) => {
+    try {
+        let user = req.profile;
+        await userServices.deleteUser(user);
+        res.json(user);
+    } catch (err) {
+        next(err);
     }
 };
 

@@ -49,13 +49,19 @@ import userRoutes from './routes/user.routes'
 import authRoutes from './routes/auth.routes'
 
 // ! comment out before building for production ****
-import devBundle from './devBundle' // ! ***********
+// import devBundle from './devBundle' // ! ***********
 
 const CURRENT_WORKING_DIR = process.cwd()
 const app = express()
 
 // ! comment out before building for production ****
-devBundle.compile(app) // ! ************************
+// devBundle.compile(app) // ! ************************
+
+// * Enable 'morgan' - if using development environment:
+if (config.env === 'development') {
+    app.use(morgan('tiny'));
+    log.info('Morgan Enabled...');
+}
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -63,12 +69,6 @@ app.use(cookieParser())
 app.use(compress())
 app.use(helmet())
 app.use(cors())
-
-// * enable morgan - if using development environment:
-if (config.env === 'development') {
-    app.use(morgan('tiny'));
-    log.info('Morgan Enabled...');
-}
 
 // * Explanation - https://www.digitalocean.com/community/tutorials/react-server-side-rendering
 // * server side rendering to serve static files from /dist

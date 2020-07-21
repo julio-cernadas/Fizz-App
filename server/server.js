@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import config from "./../config/config";
 import log from "../utils/webpack-logger"
 
-
 // * Connection URL
 mongoose.connect(config.mongoUri, {
     useNewUrlParser: true,
