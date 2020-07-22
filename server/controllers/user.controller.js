@@ -19,7 +19,6 @@ import log from "./../../utils/webpack-logger";
 // * GET METHOD - Load users
 const list = async (req, res, next) => {
     try {
-        // 'getUsers' returns a promise since it is an async function!
         const users = await userServices.getUsers();
         res.json(users);
     } catch (err) {
