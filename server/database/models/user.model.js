@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
+import jwt from 'jsonwebtoken'
+
+import config from './../../../config/config'
+import log from "./../../../utils/webpack-logger";
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -35,7 +39,7 @@ UserSchema.methods = {
         if (!password) return "";
         try {
             return crypto
-                .createHmac("sha1", this.salt)
+                .createHmac("sha1", this.salt)  // Uses salt generated in virtual prop
                 .update(password)
                 .digest("hex");
         } catch (err) {
@@ -43,9 +47,17 @@ UserSchema.methods = {
         }
     },
     // Used in 'auth.controller.js' to authenticate the password for signin!
-    authenticate: function (plainText) {
-        return this.encryptPassword(plainText) === this.hashed_password;
+    isAuthenticated: function (plainTextPassword) {
+        return this.encryptPassword(plainTextPassword) === this.hashed_password;
     },
+
+    getSignedToken: function () {
+        // To see the token conversion go to -> https://www.jsonwebtoken.io/
+        const payload = { _id: this._id }
+        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' })
+        log.info('Successfully generated signed web token!')
+        return token
+    }
 };
 
 // Virtual means that the property wont be persisted to the db, instead you'll

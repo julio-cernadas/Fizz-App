@@ -1,5 +1,7 @@
 import express from "express";
-import authCtrl from "../controllers/auth.controller";
+
+import authCtrl from "./../controllers/auth.controller";
+import { asyncMiddleware } from "./../helpers/async";
 
 const router = express.Router();
 
@@ -9,14 +11,6 @@ const router = express.Router();
 router
     .route("/auth/signin")
     // POST - REQUEST TO AUTHENTICATE THE USER WITH THEIR EMAIL AND PASSWORD
-    .post(authCtrl.signin);
-
-//* -------------------------------------------------------------------------- */
-//*                            ROUTE - /auth/signout                           */
-//* -------------------------------------------------------------------------- */
-router
-    .route("/auth/signout")
-    // GET - CLEAR THE COOKIE WITH A JWT THAT WAS SET ON THE RESPONSE OBJECT AFTER SIGN-IN
-    .get(authCtrl.signout);
+    .post(asyncMiddleware(authCtrl.signin));
 
 export default router;
