@@ -9,7 +9,6 @@ export default function (mongoURI) {
     });
 
     mongoose.connection.on("error", () => {
-        // log.error('Cannot connect to database!')
         throw new Error(`Shutting down application: ${mongoURI}`);
     });
 }

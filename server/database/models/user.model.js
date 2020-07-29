@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
-import config from './../../../config/config'
+import config from "./../../../config/config";
 import log from "./../../../utils/webpack-logger";
 
 const UserSchema = new mongoose.Schema({
@@ -23,11 +23,21 @@ const UserSchema = new mongoose.Schema({
         required: "Password is required",
     },
     salt: String,
-    updated: Date,
+    about: {
+        type: String,
+        trim: true,
+    },
+    photo: {
+        data: Buffer,
+        contentType: String,
+    },
+    following: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+    followers: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
     created: {
         type: Date,
         default: Date.now,
     },
+    updated: Date,
 });
 
 UserSchema.methods = {
@@ -39,7 +49,7 @@ UserSchema.methods = {
         if (!password) return "";
         try {
             return crypto
-                .createHmac("sha1", this.salt)  // Uses salt generated in virtual prop
+                .createHmac("sha1", this.salt) // Uses salt generated in virtual prop
                 .update(password)
                 .digest("hex");
         } catch (err) {
@@ -53,11 +63,11 @@ UserSchema.methods = {
 
     getSignedToken: function () {
         // To see the token conversion go to -> https://www.jsonwebtoken.io/
-        const payload = { _id: this._id }
-        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' })
-        log.info('Successfully generated signed web token!')
-        return token
-    }
+        const payload = { _id: this._id };
+        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+        log.info("Successfully generated signed web token!");
+        return token;
+    },
 };
 
 // Virtual means that the property wont be persisted to the db, instead you'll

@@ -14,32 +14,30 @@ import { asyncMiddleware, asyncParamware } from "./../helpers/async";
 const router = express.Router();
 
 //* -------------------------------------------------------------------------- */
-//*                               ROUTE - /users                               */
-//* -------------------------------------------------------------------------- */
-router
-    .route("/users")
-    // GET - LIST ALL USERS
-    .get(asyncMiddleware(userCtrl.list))
-    // POST - CREATE NEW USERS
-    .post(asyncMiddleware(userCtrl.create));
-
-//* -------------------------------------------------------------------------- */
-//*                           ROUTE - /users/:userId                           */
+//*                               PARAM - :userId                              */
 //* -------------------------------------------------------------------------- */
 // This fetches and loads the user into the 'request' object, before propagating
 // it to the next function that's specific to the request that came in.
 router.param("userId", asyncParamware(userCtrl.userByID)); // this sets 'req.profile'
 
-// After the 'userId' was processed, then we move onto this part...
-// NOTE: 'requireSignIn' for authentication + 'hasAuthorization' for authorization.
-router
-    .route("/users/:userId")
 
+//* -------------------------------------------------------------------------- */
+//*                               ROUTE - /users                               */
+//* -------------------------------------------------------------------------- */
+router.route("/users")
+    // GET - LIST ALL USERS
+    .get(asyncMiddleware(userCtrl.list))
+    // POST - CREATE NEW USERS
+    .post(asyncMiddleware(userCtrl.create));
+
+
+//* -------------------------------------------------------------------------- */
+//*                           ROUTE - /users/:userId                           */
+//* -------------------------------------------------------------------------- */
+// NOTE: 'requireSignIn' for authentication + 'hasAuthorization' for authorization.
+router.route("/users/:userId")
     // GET - LIST ALL THE USER DETAILS
-    .get(
-        authCtrl.requireSignin,
-        userCtrl.read)
-    // .get(userCtrl.read)
+    .get(authCtrl.requireSignin, userCtrl.read)
 
     // PUT - UPDATE A USER'S DETAILS
     .put(
@@ -47,7 +45,6 @@ router
         authCtrl.hasAuthorization,
         asyncMiddleware(userCtrl.update)
     )
-    // .put(userCtrl.update)
 
     // DELETE - REMOVE A SPECIFIC USER
     .delete(
@@ -55,6 +52,22 @@ router
         authCtrl.hasAuthorization,
         asyncMiddleware(userCtrl.remove)
     );
-// .delete(userCtrl.remove);
+
+
+//* -------------------------------------------------------------------------- */
+//*                     ROUTE - /users/photos/defaultphoto                     */
+//* -------------------------------------------------------------------------- */
+router.route("/users/photos/defaultphoto")
+    // GET - DEFAULT USER PROFILE PHOTO
+    .get(userCtrl.defaultPhoto);
+
+
+//* -------------------------------------------------------------------------- */
+//*                        ROUTE - /users/photos/:userId                       */
+//* -------------------------------------------------------------------------- */
+router.route("/users/photos/:userId")
+    // GET - USER UPLOADED PROFILE PHOTO
+    .get(userCtrl.photo, userCtrl.defaultPhoto);
+
 
 export default router;
