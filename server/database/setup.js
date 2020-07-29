@@ -11,4 +11,6 @@ export default function (mongoURI) {
     mongoose.connection.on("error", () => {
         throw new Error(`Shutting down application: ${mongoURI}`);
     });
+
+    mongoose.set('useFindAndModify', false);
 }

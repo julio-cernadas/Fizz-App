@@ -6,17 +6,17 @@
 // to the Node application, etc. And in general, contains most of your algorithmic code.
 
 // Provides functions for common tasks like the manipulation of arrays and objects.
+
+// TODO: add more validation checks + add validation directory
+
 import _ from "lodash";
 import fs from 'fs'
 
 import User from "./../database/models/user.model";
+import dbTools from "./../database/dbTools"
 import { handle } from "./../helpers/async";
 import { Err, InternalErr } from "./../helpers/errors";
 import log from "./../../utils/webpack-logger";
-
-// TODO:
-// - add more validation checks!
-// - create validation folder to separate concerns
 
 //* -------------------------------------------------------------------------- */
 //*                               ROUTE - /users                               */
@@ -56,7 +56,11 @@ const createUser = async (userData) => {
 // Find a user profile by id in params...
 const findUser = async (id) => {
     // Check if user exists, otherwise throw error.
-    let [user, err] = await handle(User.findById(id).select("-hashed_password -salt"));
+    let [user, err] = await handle(User.findById(id).select("-hashed_password -salt")
+        .populate('following', '_id name')
+        .populate('followers', '_id name')
+        .exec()
+    );
     if (err) throw new Err(400, "Could not find user, try a different ID!", err)
     log.info(`Found User: ${id}`);
     return user;
@@ -91,10 +95,52 @@ const deleteUser = async (user) => {
     log.info("Successfully deleted user profile!");
 };
 
+
+//* -------------------------------------------------------------------------- */
+//*                   ROUTE - /users/follow ~ /users/unfollow                  */
+//* -------------------------------------------------------------------------- */
+// Push/pull reference User ID to/from current User's 'Following' array.
+const updateFollowingDBArray = async (userId, refId, action) => {
+    const updateData = {};
+    updateData["$" + action] = { following: refId }; // == { $action: { following: followId }
+    await User.findByIdAndUpdate(userId, updateData)
+        .catch((err) => { throw new Error(err) });
+    const word = (action === "push" ? "to" : "from")
+    log.info(`Successfully ${action}ed user-${refId} ${word} user's-${userId} 'Following' array`);
+}
+
+// Push/pull current User ID to/from reference User's 'Followers' array.
+const updateFollowersDBArray = async (userId, refId, action) => {
+    const updateData = {};
+    updateData["$" + action] = { followers: userId }; // == { $action: { followers: userId } }
+    let user = await User.findByIdAndUpdate(refId, updateData, { new: true })
+        .select("-hashed_password -salt")
+        .populate("following", "_id name")
+        .populate("followers", "_id name")
+        .exec();
+    const word = (action === "push" ? "to" : "from")
+    log.info(`Successfully ${action}ed user-${userId} ${word} user's-${refId} 'Followers' array`);
+    return user;
+}
+
+
+//* -------------------------------------------------------------------------- */
+//*                      ROUTE - /users/findpeople/:userId                     */
+//* -------------------------------------------------------------------------- */
+const findNonFollowedUsers = async (following) => {
+    let users = await User.find({ _id: { $nin: following } }).select('name')
+        .catch((err) => { throw new Error(err) });
+    return users;
+}
+
+
 export default {
     getUsers,
     createUser,
     findUser,
     updateUser,
     deleteUser,
+    updateFollowingDBArray,
+    updateFollowersDBArray,
+    findNonFollowedUsers,
 };
