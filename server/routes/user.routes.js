@@ -22,7 +22,6 @@ router.route("/users/photos/defaultphoto")
     // GET - DEFAULT USER PROFILE PHOTO
     .get(userCtrl.defaultPhoto);
 
-
 //* -------------------------------------------------------------------------- */
 //*                        ROUTE - /users/photos/:userId                       */
 //* -------------------------------------------------------------------------- */
@@ -30,34 +29,27 @@ router.route("/users/photos/:userId")
     // GET - USER UPLOADED PROFILE PHOTO
     .get(userCtrl.photo, userCtrl.defaultPhoto);
 
-
 //* -------------------------------------------------------------------------- */
-//*                            ROUTE - /users/follow                           */
+//*                   ROUTE - /users/follow ~ /users/unfollow                  */
 //* -------------------------------------------------------------------------- */
 router.route('/users/follow')
     // PUT - ADD TO FOLLOWING AND FOLLOWERS REFERENCE ARRAY
     // ! .put(authCtrl.requireSignin, userCtrl.addFollowing, userCtrl.addFollower)
     .put(asyncMiddleware(userCtrl.addFollowing), asyncMiddleware(userCtrl.addFollower))
 
-
-//* -------------------------------------------------------------------------- */
-//*                           ROUTE - /users/unfollow                          */
-//* -------------------------------------------------------------------------- */
 router.route('/users/unfollow')
     // PUT - REMOVE FROM FOLLOWING AND FOLLOWERS REFERENCE ARRAY
     // ! .put(authCtrl.requireSignin, userCtrl.removeFollowing, userCtrl.removeFollower)
     .put(asyncMiddleware(userCtrl.removeFollowing), asyncMiddleware(userCtrl.removeFollower))
 
-
 //* -------------------------------------------------------------------------- */
 //*                               ROUTE - /users                               */
 //* -------------------------------------------------------------------------- */
 router.route("/users")
-// GET - LIST ALL USERS
-.get(asyncMiddleware(userCtrl.list))
-// POST - CREATE NEW USERS
-.post(asyncMiddleware(userCtrl.create));
-
+    // GET - LIST ALL USERS
+    .get(asyncMiddleware(userCtrl.list))
+    // POST - CREATE NEW USERS
+    .post(asyncMiddleware(userCtrl.create));
 
 //* -------------------------------------------------------------------------- */
 //*                           ROUTE - /users/:userId                           */
@@ -73,7 +65,6 @@ router.route("/users/:userId")
     // DELETE - REMOVE A SPECIFIC USER
     .delete(authCtrl.requireSignin, authCtrl.hasAuthorization, asyncMiddleware(userCtrl.remove));
 
-
 //* -------------------------------------------------------------------------- */
 //*                      ROUTE - /users/findpeople/:userId                     */
 //* -------------------------------------------------------------------------- */
@@ -82,14 +73,12 @@ router.route('/users/findpeople/:userId')
     // ! .get(authCtrl.requireSignin, userCtrl.findPeople)
     .get(userCtrl.findPeople);
 
-
 //* -------------------------------------------------------------------------- */
-//*                               PARAM - :userId                              */
+//*                               PARAMS - userId                              */
 //* -------------------------------------------------------------------------- */
 // This fetches and loads the user into the 'request' object, before propagating
 // it to the next function that's specific to the request that came in.
 router.param("userId", asyncParamware(userCtrl.userByID)); // sets 'req.profile'
-
 
 
 export default router;

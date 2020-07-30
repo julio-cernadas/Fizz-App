@@ -17,13 +17,13 @@ import log from "./../../utils/webpack-logger";
 //* -------------------------------------------------------------------------- */
 //*                               ROUTE - /users                               */
 //* -------------------------------------------------------------------------- */
-// * GET METHOD - Load users
+//* GET METHOD - Load users
 const list = async (req, res) => {
     const users = await userServices.getUsers();
     res.status(200).json(users);
 };
 
-// * POST METHOD - Create a new user
+//* POST METHOD - Create a new user
 const create = async (req, res) => {
     const userData = req.body;
     await userServices.createUser(userData);
@@ -35,16 +35,15 @@ const create = async (req, res) => {
 //* -------------------------------------------------------------------------- */
 //*                           ROUTE - /users/:userId                           */
 //* -------------------------------------------------------------------------- */
-// * PARAMS MIDDLEWARE for ':userId'
+//* PARAMS MIDDLEWARE for ':userId'
 // The userByID controller function uses the value in the :userId parameter
 // to query the database by _id and load the matching user's details.
 const userByID = async (req, res, next, id) => {
-    const userID = id;
-    req.profile = await userServices.findUser(userID);
+    req.profile = await userServices.findUser(id);
     next();
 };
 
-// * GET METHOD - read user details by userId
+//* GET METHOD - read user details by userId
 // This retrieves the user details from req.profile and removes sensitive
 // info, such as the hashed_password and salt values, before sending response.
 const read = (req, res) => {
@@ -53,7 +52,7 @@ const read = (req, res) => {
     res.status(200).json(userProfile);
 };
 
-// * PUT METHOD - update a user's details by userId
+//* PUT METHOD - update a user's details by userId
 // Note we're receiving form data here, so use Postman!
 const update = (req, res) => {
     let user = req.profile;
@@ -65,7 +64,7 @@ const update = (req, res) => {
     });
 };
 
-// * DELETE METHOD - remove a user by userId
+//* DELETE METHOD - remove a user by userId
 // This function retrieves the user from req.profile.
 const remove = async (req, res) => {
     let user = req.profile;
@@ -96,7 +95,7 @@ const photo = (req, res, next) => {
 };
 
 //* -------------------------------------------------------------------------- */
-//*                            ROUTE - /users/follow                           */
+//*                   ROUTE - /users/follow ~ /users/unfollow                  */
 //* -------------------------------------------------------------------------- */
 // * PUT METHOD - add followed user's reference to the current user's 'Following' array
 const addFollowing = async (req, res, next) => {
@@ -112,9 +111,6 @@ const addFollower = async (req, res) => {
     res.status(200).json(user);
 };
 
-//* -------------------------------------------------------------------------- */
-//*                           ROUTE - /users/unfollow                          */
-//* -------------------------------------------------------------------------- */
 // * PUT METHOD - remove followed user's reference from the current user's 'Following' array
 const removeFollowing = async (req, res, next) => {
     const { userId, unfollowId } = req.body;

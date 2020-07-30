@@ -17,8 +17,9 @@ import helmet from "helmet";
 import cors from "cors";
 
 // API routes for Express
-import userRoutes from "./user.routes";
 import authRoutes from "./auth.routes";
+import userRoutes from "./user.routes";
+import postRoutes from "./post.routes"
 
 import log from "./../../utils/webpack-logger";
 
@@ -38,6 +39,7 @@ export default function (ENV, app) {
     app.use(cors());
 
     // Mount API routes to Express...
-    app.use("/api/v1", userRoutes);
     app.use("/api/v1", authRoutes);
+    app.use("/api/v1", userRoutes);
+    app.use('/api/v1', postRoutes)
 }

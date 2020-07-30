@@ -13,7 +13,6 @@ import _ from "lodash";
 import fs from 'fs'
 
 import User from "./../database/models/user.model";
-import dbTools from "./../database/dbTools"
 import { handle } from "./../helpers/async";
 import { Err, InternalErr } from "./../helpers/errors";
 import log from "./../../utils/webpack-logger";
@@ -56,12 +55,14 @@ const createUser = async (userData) => {
 // Find a user profile by id in params...
 const findUser = async (id) => {
     // Check if user exists, otherwise throw error.
-    let [user, err] = await handle(User.findById(id).select("-hashed_password -salt")
-        .populate('following', '_id name')
-        .populate('followers', '_id name')
-        .exec()
+    const [user, err] = await handle(
+        User.findById(id)
+            .select("-hashed_password -salt")
+            .populate("following", "_id name")
+            .populate("followers", "_id name")
+            .exec()
     );
-    if (err) throw new Err(400, "Could not find user, try a different ID!", err)
+    if (err) throw new Err(400, "Could not find user, try a different ID!");
     log.info(`Found User: ${id}`);
     return user;
 };
@@ -95,7 +96,6 @@ const deleteUser = async (user) => {
     log.info("Successfully deleted user profile!");
 };
 
-
 //* -------------------------------------------------------------------------- */
 //*                   ROUTE - /users/follow ~ /users/unfollow                  */
 //* -------------------------------------------------------------------------- */
@@ -122,7 +122,6 @@ const updateFollowersDBArray = async (userId, refId, action) => {
     log.info(`Successfully ${action}ed user-${userId} ${word} user's-${refId} 'Followers' array`);
     return user;
 }
-
 
 //* -------------------------------------------------------------------------- */
 //*                      ROUTE - /users/findpeople/:userId                     */
