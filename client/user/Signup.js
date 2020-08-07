@@ -16,18 +16,34 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { create } from "./api-user.js";
-/* -------------------------------------------------------------------------- */
 
-// we initialize the state using the useState hook with empty input field values,
-// an empty error message, and set the dialog open variable to false.
+import backgroundImg from "./../assets/images/background3.jpg";
 
 const useStyles = makeStyles((theme) => ({
+    background: {
+        backgroundImage: `url(${backgroundImg})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        height: "100vh",
+        paddingTop: theme.spacing(1),
+    },
     card: {
-        maxWidth: 600,
+        maxWidth: 440,
         margin: "auto",
         textAlign: "center",
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(16),
+        paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
+    },
+    cardBottom: {
+        maxWidth: 440,
+        margin: "auto",
+        textAlign: "center",
+        marginTop: theme.spacing(2),
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(0),
     },
     error: {
         verticalAlign: "middle",
@@ -40,6 +56,14 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: 300,
+    },
+    text: {
+        textAlign: "center",
+    },
+    button: {
+        margin: "auto",
+        marginRight: theme.spacing(10),
+        marginBottom: theme.spacing(2),
     },
     submit: {
         margin: "auto",
@@ -57,8 +81,6 @@ export default function Signup() {
         error: "",
     });
 
-    // This takes the new value that's entered in the input field
-    // and sets it as the state.
     const handleChange = (name) => (event) => {
         setValues({
             ...values,
@@ -75,9 +97,11 @@ export default function Signup() {
             email: values.email || undefined,
             password: values.password || undefined,
         };
+
+        //* API METHOD CALLED HERE...
         create(user).then((data) => {
             if (data.error) {
-                setValues({ ...values, error: data.error });
+                setValues({ ...values, error: data.error.message });
             } else {
                 setValues({ ...values, error: "", open: true });
             }
@@ -85,11 +109,11 @@ export default function Signup() {
     };
 
     return (
-        <React.Fragment>
+        <div className={classes.background}>
             <Card className={classes.card}>
                 <CardContent>
                     <Typography variant="h6" className={classes.title}>
-                        Sign Up
+                        JOIN THE FUN!
                     </Typography>
                     <TextField
                         id="name"
@@ -141,18 +165,28 @@ export default function Signup() {
                     </Button>
                 </CardActions>
             </Card>
+            <Card className={classes.cardBottom}>
+                <CardContent>
+                    <Link to="/signin">
+                        <Typography color="inherit">
+                            Already have an account? Log In
+                        </Typography>
+                    </Link>
+                </CardContent>
+            </Card>
 
             {/* NEW ACCOUNT CREATION MESSAGE */}
             <Dialog open={values.open} disableBackdropClick={true}>
-                <DialogTitle>New Account</DialogTitle>
+                <DialogTitle className={classes.text}>Welcome!</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        New account successfully created.
+                        Account Successfully Created.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Link to="/signin">
                         <Button
+                            className={classes.button}
                             color="primary"
                             autoFocus="autoFocus"
                             variant="contained"
@@ -162,6 +196,6 @@ export default function Signup() {
                     </Link>
                 </DialogActions>
             </Dialog>
-        </React.Fragment>
+        </div>
     );
 }

@@ -5,6 +5,14 @@ import { Err } from "./../helpers/errors";
 import log from "./../../utils/webpack-logger";
 
 //* -------------------------------------------------------------------------- */
+//*                               PARAMS - postId                              */
+//* -------------------------------------------------------------------------- */
+const postByID = async (req, res, next, id) => {
+    req.post = await postServices.findPost(id);
+    next();
+};
+
+//* -------------------------------------------------------------------------- */
 //*                         ROUTE - /posts/new/:userId'                        */
 //* -------------------------------------------------------------------------- */
 //* POST METHOD - user creates a new post.
@@ -21,12 +29,6 @@ const create = async (req, res) => {
 //* -------------------------------------------------------------------------- */
 //*                        ROUTE - /posts/photo/:postId                        */
 //* -------------------------------------------------------------------------- */
-//* PARAMS MIDDLEWARE for ':photoId'.
-const postByID = async (req, res, next, id) => {
-    req.post = await postServices.findPost(id);
-    next();
-};
-
 //* GET - retrieve a specified post's photo.
 const photo = (req, res) => {
     res.set("Content-Type", req.post.photo.contentType);

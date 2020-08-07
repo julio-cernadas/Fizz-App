@@ -12,83 +12,115 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Edit from "@material-ui/icons/Edit";
-import Person from "@material-ui/icons/Person";
 import Divider from "@material-ui/core/Divider";
 
+import FollowProfileButton from './../user/FollowProfileButton'
+import ProfileTabs from './../user/ProfileTabs'
 import DeleteUser from "./DeleteUser";
 import auth from "./../auth/auth-helper";
+import {listByUser} from './../post/api-post.js'
 import { read } from "./api-user.js";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     root: theme.mixins.gutters({
         maxWidth: 600,
-        margin: "auto",
+        margin: 'auto',
         padding: theme.spacing(3),
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(5)
     }),
     title: {
-        marginTop: theme.spacing(3),
+        margin: `${theme.spacing(2)}px ${theme.spacing(1)}px 0`,
         color: theme.palette.protectedTitle,
+        fontSize: '1em'
     },
-}));
+    bigAvatar: {
+        width: 60,
+        height: 60,
+        margin: 10
+    }
+}))
 
-/* -------------------------------------------------------------------------- */
 
-export default function Profile({ match }) {
+export default function Profile({match, ...props}) {
     const classes = useStyles();
-
-    // In the Profile component definition, we need to initialize the state with
-    // an empty user and set redirectToSignin to false.
-    const [user, setUser] = useState({});
-    const [redirectToSignin, setRedirectToSignin] = useState(false);
+    const [values, setValues] = useState({
+        user: { following: [], followers: [] },
+        redirectToSignin: false,
+        following: false
+    })
+    const [posts, setPosts] = useState([])
     const jwt = auth.isAuthenticated();
 
-    // The Profile component should fetch user information and render the view
-    // with these details. To implement this, we will use the useEffect hook,
-    // as we did in the Users component.
-
-    // This effect uses the match.params.userId value and calls the read user
-    // fetch method. Since this method also requires credentials to authorize
-    // the signed-in user, the JWT is retrieved from sessionStorage using the
-    // isAuthenticated method from auth-helper.js, and passed in the call to read.
-
-    // Once the server responds, either the state is updated with the user
-    // information or the view is redirected to the Sign In view if the current
-    // user is not authenticated. We also add a cleanup function in this effect
-    // hook to abort the fetch signal when the component unmounts.
-
-    // This effect only needs to rerun when the userId parameter changes in the
-    // route, for example, when the app goes from one profile view to the other.
-    // To ensure this effect reruns when the userId value updates, we will add
-    // [match.params.userId] in the second argument to useEffect.
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
-        read(
-            {
-                userId: match.params.userId,
-            },
-            { t: jwt.token },
-            signal
-        ).then((data) => {
-            if (data && data.error) {
-                setRedirectToSignin(true);
-            } else {
-                setUser(data);
-            }
-        });
+        read({ userId: match.params.userId }, { t: jwt.token }, signal)
+            .then((data) => {
+                if (data && data.error) {
+                    setValues({ ...values, redirectToSignin: true });
+                } else {
+                    let following = checkFollow(data)
+                    setValues({ ...values, user: data, following: following })
+                    loadPosts(data._id)
+                }
+            });
 
         return function cleanup() {
             abortController.abort();
         };
     }, [match.params.userId]);
 
+    const checkFollow = (user) => {
+        const match = user.followers.some((follower) => {
+            return follower._id == jwt.user._id;
+        });
+        return match;
+    };
+
+    const clickFollowButton = (callApi) => {
+        callApi({ userId: jwt.user._id }, { t: jwt.token }, values.user._id)
+            .then((data) => {
+                if (data.error) {
+                    setValues({ ...values, error: data.error });
+                } else {
+                    setValues({
+                        ...values,
+                        user: data,
+                        following: !values.following,
+                    });
+                }
+            });
+    };
+
+    const loadPosts = (user) => {
+        listByUser({ userId: user }, { t: jwt.token })
+            .then((data) => {
+                if (data.error) {
+                    console.log(data.error);
+                } else {
+                    setPosts(data);
+                }
+            });
+    };
+
+    const removePost = (post) => {
+        const updatedPosts = posts;
+        const index = updatedPosts.indexOf(post);
+        updatedPosts.splice(index, 1);
+        setPosts(updatedPosts);
+    };
+
+    const photoUrl = values.user._id
+        ? `/api/v1/users/photos/${values.user._id}?${new Date().getTime()}`
+        : "/api/v1/users/photos/defaultphoto";
+
     // If the current user is not authenticated, we set up the conditional
     // redirect to the Sign In view.
-    if (redirectToSignin) {
-        return <Redirect to="/signin" />;
+    if (values.redirectToSignin) {
+        return <Redirect to='/signin' />
     }
+
     return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant="h6" className={classes.title}>
@@ -97,32 +129,28 @@ export default function Profile({ match }) {
             <List dense>
                 <ListItem>
                     <ListItemAvatar>
-                        <Avatar>
-                            <Person />
-                        </Avatar>
+                        <Avatar src={photoUrl} className={classes.bigAvatar} />
                     </ListItemAvatar>
-                    <ListItemText primary={user.name} secondary={user.email} />{" "}
-                    {auth.isAuthenticated().user &&
-                        auth.isAuthenticated().user._id == user._id && (
-                            <ListItemSecondaryAction>
-                                <Link to={"/user/edit/" + user._id}>
-                                    <IconButton aria-label="Edit" color="primary">
-                                        <Edit />
-                                    </IconButton>
-                                </Link>
-                                <DeleteUser userId={user._id} />
-                            </ListItemSecondaryAction>
-                        )}
+                    <ListItemText primary={values.user.name} secondary={values.user.email} />
+                    {auth.isAuthenticated().user && (auth.isAuthenticated().user._id == values.user._id)
+                        ? (<ListItemSecondaryAction>
+                            <Link to={"/user/edit/" + values.user._id}>
+                                <IconButton aria-label="Edit" color="primary">
+                                    <Edit />
+                                </IconButton>
+                            </Link>
+                            <DeleteUser userId={values.user._id} />
+                        </ListItemSecondaryAction>)
+                        : (<FollowProfileButton following={values.following} onButtonClick={clickFollowButton} />)
+                    }
                 </ListItem>
                 <Divider />
                 <ListItem>
-                    <ListItemText
-                        primary={
-                            "Joined: " + new Date(user.created).toDateString()
-                        }
-                    />
+                    <ListItemText primary={values.user.about} secondary={"Joined: " + (
+                        new Date(values.user.created)).toDateString()} />
                 </ListItem>
             </List>
+            <ProfileTabs user={values.user} posts={posts} removePostUpdate={removePost} />
         </Paper>
     );
 }

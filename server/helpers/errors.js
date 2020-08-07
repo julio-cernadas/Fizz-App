@@ -29,25 +29,28 @@ export class InternalErr extends Err {
 // https://codeburst.io/better-error-handling-in-express-js-b118fc29e9c7
 export function errorHandler(err, req, res, next) {
     if (err.id === "Err_Class") {
+        console.log(err)
         const { status, message, details } = err;
         log.error(message);
         res.status(status).json({
-            "Error": {
-                "Status": status,
-                "Message": message,
-                "Details": details,
+            "error": {
+                "status": status,
+                "message": message,
+                "details": details,
             },
         });
     } else if (err instanceof Error) {
         const { message } = err;
         log.error(message);
+        console.log(err)
         res.status(400).json({
-            "Error": err.message,
+            "error": err.name + ": " + err.message,
         });
     } else {
+        console.log(err)
         log.error(err);
         res.status(500).json({
-            "Error": err,
+            "error": err,
         });
     }
 }

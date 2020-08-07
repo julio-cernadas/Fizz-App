@@ -56,6 +56,7 @@ const read = (req, res) => {
 // Note we're receiving form data here, so use Postman!
 const update = (req, res) => {
     let user = req.profile;
+    log.debug("executed", req)
     const form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.parse(req, async (err, fields, files) => {

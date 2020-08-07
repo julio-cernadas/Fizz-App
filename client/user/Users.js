@@ -35,15 +35,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Users() {
     const classes = useStyles();
+
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        // When the fetch request is initiated, we pass in the AbortSignal as a param. This associates
-        // the signal and controller with the fetch request and allows us to abort it by calling
-        // AbortController.abort(), as seen below.
+        // When the fetch request is initiated, we pass in the AbortSignal as a
+        // param. This associates the signal and controller with the fetch request
+        // and allows us to abort it by calling AbortController.abort()
         const abortController = new AbortController();
         const signal = abortController.signal;
 
+        // * API METHOD CALLED HERE...
         list(signal).then((data) => {
             if (data && data.error) {
                 console.log(data.error);
@@ -52,14 +54,13 @@ export default function Users() {
             }
         });
 
-        // returns on 'useEffect' are treated as cleanup functions
         return function cleanup() {
             abortController.abort();
         };
     }, []);
 
     return (
-        <Paper className={classes.root} elevation={4}>
+        <Paper className={classes.root} elevation={2}>
             <Typography variant="h6" className={classes.title}>
                 All User
             </Typography>

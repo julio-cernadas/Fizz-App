@@ -6,6 +6,20 @@ import { handle } from "./../helpers/async";
 import { Err, InternalErr } from "./../helpers/errors";
 import log from "./../../utils/webpack-logger";
 
+//* -------------------------------------------------------------------------- */
+//*                               PARAMS - postId                              */
+//* -------------------------------------------------------------------------- */
+const findPost = async (postId) => {
+    const [post, err] = await handle(
+        Post.findById(postId).populate("postedBy", "_id name").exec()
+    );
+    if (err) throw new Err(400, "Post not found, try a different ID!");
+    return post;
+};
+
+//* -------------------------------------------------------------------------- */
+//*                         ROUTE - /posts/new/:userId                         */
+//* -------------------------------------------------------------------------- */
 const createPost = async (user, err, fields, files) => {
     if (err) throw new Err(400, "Image could not be uploaded, try again!", err);
     const post = new Post(fields);
@@ -18,6 +32,9 @@ const createPost = async (user, err, fields, files) => {
     return post;
 };
 
+//* -------------------------------------------------------------------------- */
+//*                         ROUTE - /posts/feed/:userId                        */
+//* -------------------------------------------------------------------------- */
 const getFollowedUsersPosts = async (following) => {
     let [posts, err] = await handle(
         Post.find({ postedBy: { $in: following } })
@@ -30,6 +47,9 @@ const getFollowedUsersPosts = async (following) => {
     return posts;
 };
 
+//* -------------------------------------------------------------------------- */
+//*                          ROUTE - /posts/by/:userId                         */
+//* -------------------------------------------------------------------------- */
 const getUserPosts = async (userId) => {
     let [posts, err] = await handle(
         Post.find({ postedBy: userId })
@@ -42,19 +62,17 @@ const getUserPosts = async (userId) => {
     return posts;
 };
 
-const findPost = async (postId) => {
-    const [post, err] = await handle(
-        Post.findById(postId).populate("postedBy", "_id name").exec()
-    );
-    if (err) throw new Err(400, "Post not found, try a different ID!");
-    return post;
-};
-
+//* -------------------------------------------------------------------------- */
+//*                           ROUTE - /posts/:postId                           */
+//* -------------------------------------------------------------------------- */
 const deletePost = async (post) => {
     const deletedPost = await post.remove();
     return deletedPost;
 };
 
+//* -------------------------------------------------------------------------- */
+//*                     ROUTE - /posts/like ~ /posts/unlike                    */
+//* -------------------------------------------------------------------------- */
 const updateLikesArray = async (postId, userId, action) => {
     const updateData = {};
     updateData["$" + action] = { likes: userId }; // ==> { $action: { likes: userId } }
@@ -64,6 +82,9 @@ const updateLikesArray = async (postId, userId, action) => {
     return post;
 };
 
+//* -------------------------------------------------------------------------- */
+//*                  ROUTE - /posts/comment ~ /posts/uncomment                 */
+//* -------------------------------------------------------------------------- */
 const updateCommentsArray = async (postId, comment, action) => {
     const updateData = {};
     updateData["$" + action] = { comments: comment }; // ==> { $action: { comments: comment } }

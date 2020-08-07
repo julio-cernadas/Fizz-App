@@ -13,6 +13,9 @@ import template from './template'
 
 // Material Styling Purposes...
 import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles'
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+import log from "./../../utils/webpack-logger"
 
 const CURRENT_WORKING_DIR = process.cwd()
 
@@ -23,6 +26,8 @@ export default function (app) {
 
     // * Server side rendering setup
     // video - https://www.youtube.com/watch?v=8_RzRQXSHcg&t=494s
+    // link  - https://www.digitalocean.com/community/tutorials/react-react-router-ssr
+    // ui    - https://material-ui.com/guides/server-rendering/
     // Rendering on the server is a bit different since it’s all stateless. The
     // basic idea is that we wrap the app in a stateless <StaticRouter> instead of
     // a <BrowserRouter>. We pass in the requested url from the server so the
@@ -36,32 +41,41 @@ export default function (app) {
 
     // '*' path makes it so that all get requests have this process applied
     app.get('*', (req, res) => {
+        // The context object is useful to store information about a specific route
+        // render, and that information is then made available to the component in
+        // the form of a 'staticContext' prop
+
+        // 1. Generate CSS styles using Material-UI's ServerStyleSheets
         const sheets = new ServerStyleSheets()
         const context = {}
 
-        // Render the component to a string
+        // 2. Use renderToString to generate markup which renders components
+        //    specific to the route requested
         const markup = ReactDOMServer.renderToString(
             sheets.collect(
-                // server - not the complete story
+                // StaticRouter is a stateless router that takes the requested URL to match
+                // with the frontend route that was declared in the MainRouter component.
                 <StaticRouter location={req.url} context={context}>
-                    {/* used for material ui purposes - https://material-ui.com/guides/server-rendering/*/}
                     <ThemeProvider theme={theme}>
+                        <CssBaseline />
                         <MainRouter />
                     </ThemeProvider>
                 </StaticRouter>
             )
         )
 
+        // log.debug("context:", context)
         // check if the app was redirected
         if (context.url) {
-            log.debug(context.url)
+            // log.debug(context.url)
             return res.redirect(303, context.url)
         }
 
         // Grab the CSS from the sheets.
         const css = sheets.toString()
 
-        // Send the rendered page back to the client.
+        // 3. Return template with markup and CSS styles in the response.
+        // In other words, send the rendered page back to the client.
         res.status(200).send(template({
             markup: markup,
             css: css

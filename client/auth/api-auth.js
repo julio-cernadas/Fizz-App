@@ -7,8 +7,6 @@
 
 const signin = async (user) => {
     try {
-        // The signin method will take user sign-in data from the view component,
-        // then use fetch to make a POST call to verify the user with the backend.
         let response = await fetch('/api/v1/auth/signin/', {
             method: 'POST',
             headers: {
@@ -18,30 +16,12 @@ const signin = async (user) => {
             credentials: 'include',
             body: JSON.stringify(user)
         })
-
-        // The response from the server will be returned to the component in a
-        // promise, which may provide the JWT if sign-in was successful.
-        return await response.json()
-
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-const signout = async () => {
-    try {
-        let response = await fetch('/api/v1/auth/signout/', { method: 'GET' })
-
-        // This method will also return a promise to inform the component about
-        // whether the API request was successful.
-        return await response.json()
-
+        return await response.json();
     } catch (err) {
         console.log(err)
     }
 }
 
 export {
-    signin,
-    signout
+    signin
 }

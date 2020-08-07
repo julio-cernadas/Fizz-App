@@ -62,7 +62,7 @@ const findUser = async (id) => {
             .populate("followers", "_id name")
             .exec()
     );
-    if (err) throw new Err(400, "Could not find user, try a different ID!");
+    if (err) throw new Err(400, "Could not find user, try a different ID!", err);
     log.info(`Found User: ${id}`);
     return user;
 };

@@ -3,12 +3,13 @@ import { Link, withRouter } from "react-router-dom";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import HomeIcon from "@material-ui/icons/Home";
 import Button from "@material-ui/core/Button";
 
 import auth from "./../auth/auth-helper";
+import logo from "./../assets/logo_white.png"
+
 
 // To indicate the current location of the application on the Menu, we will
 // highlight the link that matches the current location path by changing the
@@ -22,30 +23,31 @@ const isActive = (history, path) => {
 };
 
 // We use 'withRouter' get access to the history object's properties.
+// https://stackoverflow.com/questions/53539314/what-is-withrouter-for-in-react-router-dom
 const Menu = withRouter(({ history }) => (
-    <AppBar position="static">
-        <Toolbar>
-            {/* NAV BAR LEFT SIDE TITLE */}
-            <Typography variant="h6" color="inherit">
-                MERN APP
-            </Typography>
+    <AppBar position="sticky" elevation={0}>
+        <Toolbar variant="dense">
+            {/* LEFT SIDE LOGO */}
+            <Link to="/">
+                <img src={logo} height="46" width="200"/>
+            </Link>
 
-            {/* HOME Menu Button */}
+            {/* HOME Button */}
             <Link to="/">
                 <IconButton aria-label="Home" style={isActive(history, "/")}>
                     <HomeIcon />
                 </IconButton>
             </Link>
 
-            {/* USERS Menu Button */}
+            {/* USERS Button */}
             <Link to="/users">
                 <Button style={isActive(history, "/users")}>
                     USERS
                 </Button>
             </Link>
 
-            {/* SIGN UP + SIGN IN Menu Button */}
-            {/* If user is not authenticated -> show 'SIGN UP' + 'SIGN IN' tabs*/}
+            {/* SIGN UP + LOG IN Button */}
+            {/* If user is not authenticated -> show 'SIGN UP' + 'LOG IN' tabs*/}
             {!auth.isAuthenticated() && (
                 <React.Fragment>
                     <Link to="/signup">
@@ -55,14 +57,14 @@ const Menu = withRouter(({ history }) => (
                     </Link>
                     <Link to="/signin">
                         <Button style={isActive(history, "/signin")}>
-                            SIGN IN
+                            LOG IN
                         </Button>
                     </Link>
                 </React.Fragment>
             )}
 
-            {/* MY PROFILE + SIGN OUT Menu Button */}
-            {/* If user is authenticated -> display 'MY PROFILE' + 'SIGN OUT'*/}
+            {/* MY PROFILE + LOG OUT Menu Button */}
+            {/* If user is authenticated -> display 'MY PROFILE' + 'LOG OUT'*/}
             {auth.isAuthenticated() && (
                 <React.Fragment>
                     <Link to={"/user/" + auth.isAuthenticated().user._id}>
@@ -73,7 +75,7 @@ const Menu = withRouter(({ history }) => (
                     </Link>
                     <Button color="inherit" onClick={() => {
                         auth.clearJWT(() => history.push("/"));}}>
-                        SIGN OUT
+                        LOG OUT
                     </Button>
                 </React.Fragment>
             )}

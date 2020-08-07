@@ -56,8 +56,7 @@ router.route("/users")
 //* -------------------------------------------------------------------------- */
 router.route("/users/:userId")
     // GET - LIST ALL THE USER DETAILS
-    // ! .get(authCtrl.requireSignin, userCtrl.read)
-    .get(userCtrl.read)
+    .get(authCtrl.requireSignin, userCtrl.read)
 
     // PUT - UPDATE A USER'S DETAILS
     .put(authCtrl.requireSignin, authCtrl.hasAuthorization, asyncMiddleware(userCtrl.update))

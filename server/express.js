@@ -8,8 +8,8 @@ import { errorHandler } from "./helpers/errors";
 const app = express();
 
 // ! ACTIVATES FRONT END MODULES IN DEV ENVIRONMENT
-// import devBundle from './devBundle'
-// devBundle.compile(ENV, app)
+import compile from './devBundle'
+compile(config.env, app)
 
 // * API routes and required middlewares...
 routes(config.env, app);
