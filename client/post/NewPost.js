@@ -91,7 +91,7 @@ export default function NewPost (props){
       : event.target.value
     setValues({...values, [name]: value })
   }
-  const photoURL = values.user._id ?'/api/users/photo/'+ values.user._id : '/api/users/defaultphoto'
+  const photoURL = values.user._id ?'/api/v1/users/photos/'+ values.user._id : '/api/v1/users/defaultphoto'
     return (<div className={classes.root}>
       <Card className={classes.card}>
       <CardHeader

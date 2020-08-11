@@ -41,7 +41,7 @@ export default function Users() {
     useEffect(() => {
         // When the fetch request is initiated, we pass in the AbortSignal as a
         // param. This associates the signal and controller with the fetch request
-        // and allows us to abort it by calling AbortController.abort()
+        // and allows us to abort it by calling AbortController.abort() below...
         const abortController = new AbortController();
         const signal = abortController.signal;
 

@@ -87,44 +87,49 @@ export default function FindPeople() {
     const handleRequestClose = (event, reason) => {
         setValues({ ...values, open: false })
     }
-    return (<div>
-        <Paper className={classes.root} elevation={4}>
-            <Typography type="title" className={classes.title}>
-                Who to follow
-        </Typography>
-            <List>
-                {values.users.map((item, i) => {
-                    return <span key={i}>
-                        <ListItem>
-                            <ListItemAvatar className={classes.avatar}>
-                                <Avatar src={'/api/users/photo/' + item._id} />
-                            </ListItemAvatar>
-                            <ListItemText primary={item.name} />
-                            <ListItemSecondaryAction className={classes.follow}>
-                                <Link to={"/user/" + item._id}>
-                                    <IconButton variant="contained" color="secondary" className={classes.viewButton}>
-                                        <ViewIcon />
-                                    </IconButton>
-                                </Link>
-                                <Button aria-label="Follow" variant="contained" color="primary" onClick={() => { clickFollow(item, i) }}>
-                                    Follow
-                    </Button>
-                            </ListItemSecondaryAction>
-                        </ListItem>
+    return (
+        <div>
+            <Paper className={classes.root} elevation={4}>
+                <Typography type="title" className={classes.title}>
+                    Who to follow
+                </Typography>
+                <List>
+                    {values.users.map((item, i) => {
+                        return (
+                            <span key={i}>
+                                <ListItem>
+                                    <ListItemAvatar className={classes.avatar}>
+                                        <Avatar
+                                            src={"/api/users/photo/" + item._id}
+                                        />
+                                    </ListItemAvatar>
+                                    <ListItemText primary={item.name} />
+                                    <ListItemSecondaryAction className={classes.follow} >
+                                        <Link to={"/user/" + item._id}>
+                                            <IconButton variant="contained" color="secondary"
+                                                className={classes.viewButton} >
+                                                <ViewIcon />
+                                            </IconButton>
+                                        </Link>
+                                        <Button aria-label="Follow" variant="contained"
+                                            color="primary"
+                                            onClick={() => {
+                                                clickFollow(item, i)}}>
+                                            Follow
+                                        </Button>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            </span>
+                        );
+                    })}
+                </List>
+            </Paper>
+            <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                open={values.open} onClose={handleRequestClose} autoHideDuration={6000} message={
+                    <span className={classes.snack}>
+                        {values.followMessage}
                     </span>
-                })
-                }
-            </List>
-        </Paper>
-        <Snackbar
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
-            open={values.open}
-            onClose={handleRequestClose}
-            autoHideDuration={6000}
-            message={<span className={classes.snack}>{values.followMessage}</span>}
-        />
-    </div>)
+                } />
+        </div>
+    );
 }

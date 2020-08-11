@@ -41,7 +41,7 @@ const photo = (req, res) => {
 //* GET METHOD - list of posts from all the users a specified user is following.
 const listNewsFeed = async (req, res) => {
     const following = req.profile.following;
-    // following.push(req.profile._id)
+    following.push(req.profile._id)
     let posts = await postServices.getFollowedUsersPosts(following);
     res.status(200).json(posts);
 };

@@ -1,135 +1,139 @@
 //* -------------------------------------------------------------------------- */
 //*                                 EXPLANATION                                */
 //* -------------------------------------------------------------------------- */
-// In these five api helper methods, we will cover calls to all the user
-// CRUD-related API endpoints that we implemented on the backend.
+// These API helper methods will help us access our CRUD-related API endpoints.
 
 const create = async (user) => {
     try {
-        let response = await fetch('/api/v1/users/', {
-            method: 'POST',
+        let response = await fetch("/api/v1/users/", {
+            method: "POST",
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                "Accept": "application/json",
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(user)
-        })
-        return await response.json()
+            body: JSON.stringify(user),
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const list = async (signal) => {
     try {
-        let response = await fetch('/api/v1/users/', {
-            method: 'GET',
+        let response = await fetch("/api/v1/users/", {
+            method: "GET",
             signal: signal,
-        })
-        return await response.json()
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const read = async (params, credentials, signal) => {
     try {
-        let response = await fetch('/api/v1/users/' + params.userId, {
-            method: 'GET',
+        let response = await fetch("/api/v1/users/" + params.userId, {
+            method: "GET",
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
-            }
-        })
-        return await response.json()
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + credentials.t,
+            },
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const update = async (params, credentials, user) => {
     try {
-        let response = await fetch('/api/v1/users/' + params.userId, {
-            method: 'PUT',
+        let response = await fetch("/api/v1/users/" + params.userId, {
+            method: "PUT",
             headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
+                "Accept": "application/json",
+                "Authorization": "Bearer " + credentials.t,
             },
-            body: user
-        })
-        return await response.json()
+            body: user,
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const remove = async (params, credentials) => {
     try {
-        let response = await fetch('/api/v1/users/' + params.userId, {
-            method: 'DELETE',
+        let response = await fetch("/api/v1/users/" + params.userId, {
+            method: "DELETE",
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
-            }
-        })
-        return await response.json()
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + credentials.t,
+            },
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const follow = async (params, credentials, followId) => {
     try {
-        let response = await fetch('/api/v1/users/follow/', {
-            method: 'PUT',
+        let response = await fetch("/api/v1/users/follow/", {
+            method: "PUT",
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + credentials.t,
             },
-            body: JSON.stringify({ userId: params.userId, followId: followId })
-        })
-        return await response.json()
+            body: JSON.stringify({ userId: params.userId, followId: followId }),
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const unfollow = async (params, credentials, unfollowId) => {
     try {
-        let response = await fetch('/api/v1/users/unfollow/', {
-            method: 'PUT',
+        let response = await fetch("/api/v1/users/unfollow/", {
+            method: "PUT",
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + credentials.t,
             },
-            body: JSON.stringify({ userId: params.userId, unfollowId: unfollowId })
-        })
-        return await response.json()
+            body: JSON.stringify({
+                userId: params.userId,
+                unfollowId: unfollowId,
+            }),
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const findPeople = async (params, credentials, signal) => {
     try {
-        let response = await fetch('/api/v1/users/findpeople/' + params.userId, {
-            method: 'GET',
-            signal: signal,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
+        let response = await fetch("/api/v1/users/findpeople/" + params.userId, {
+                method: "GET",
+                signal: signal,
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + credentials.t,
+                },
             }
-        })
-        return await response.json()
+        );
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
+
 export {
     create,
     list,
@@ -138,5 +142,5 @@ export {
     remove,
     follow,
     unfollow,
-    findPeople,
-}
+    findPeople
+};

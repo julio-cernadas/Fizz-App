@@ -61,12 +61,11 @@ export default function Post (props){
     likes: props.post.likes.length,
     comments: props.post.comments
   })
-  
+
   // useEffect(() => {
   //   setValues({...values, like:checkLike(props.post.likes), likes: props.post.likes.length, comments: props.post.comments})
   // }, [])
 
-  
 
   const clickLike = () => {
     let callApi = values.like ? unlike : like
@@ -87,7 +86,7 @@ export default function Post (props){
     setValues({...values, comments: comments})
   }
 
-  const deletePost = () => {   
+  const deletePost = () => {
     remove({
       postId: props.post._id
     }, {
@@ -105,7 +104,7 @@ export default function Post (props){
       <Card className={classes.card}>
         <CardHeader
             avatar={
-              <Avatar src={'/api/users/photo/'+props.post.postedBy._id}/>
+              <Avatar src={'/api/v1/users/photos/'+props.post.postedBy._id}/>
             }
             action={props.post.postedBy._id === auth.isAuthenticated().user._id &&
               <IconButton onClick={deletePost}>
@@ -124,7 +123,7 @@ export default function Post (props){
             (<div className={classes.photo}>
               <img
                 className={classes.media}
-                src={'/api/posts/photo/'+props.post._id}
+                src={'/api/v1/posts/photo/'+props.post._id}
                 />
             </div>)}
         </CardContent>
@@ -144,7 +143,7 @@ export default function Post (props){
         <Comments postId={props.post._id} comments={values.comments} updateComments={updateComments}/>
       </Card>
     )
-  
+
 }
 
 Post.propTypes = {

@@ -43,7 +43,8 @@ const getFollowedUsersPosts = async (following) => {
             .sort("-created")
             .exec()
     );
-    if (!err) throw new Error(err);
+    console.log(posts)
+    if (err) throw new Error(err);
     return posts;
 };
 

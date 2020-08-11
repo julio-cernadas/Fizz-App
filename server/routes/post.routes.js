@@ -27,42 +27,42 @@ router.route('/posts/photo/:postId')
 //* -------------------------------------------------------------------------- */
 router.route('/posts/feed/:userId')
     // GET - LIST OF POSTS FROM PEOPLE THE USER IS FOLLOWING
-    // .get(authCtrl.requireSignin, postCtrl.listNewsFeed)
-    .get(asyncMiddleware(postCtrl.listNewsFeed))
+    .get(authCtrl.requireSignin, asyncMiddleware(postCtrl.listNewsFeed))
+    // .get(asyncMiddleware(postCtrl.listNewsFeed))
 
 //* -------------------------------------------------------------------------- */
 //*                          ROUTE - /posts/by/:userId                         */
 //* -------------------------------------------------------------------------- */
 router.route('/posts/by/:userId')
     // GET - LIST OF POSTS BY A SPECIFIC USER
-    // .get(authCtrl.requireSignin, postCtrl.listByUser)
-    .get(asyncMiddleware(postCtrl.listByUser))
+    .get(authCtrl.requireSignin, asyncMiddleware(postCtrl.listByUser))
+    // .get(asyncMiddleware(postCtrl.listByUser))
 
 //* -------------------------------------------------------------------------- */
 //*                     ROUTE - /posts/like ~ /posts/unlike                    */
 //* -------------------------------------------------------------------------- */
 router.route('/posts/like')
     // PUT - PUSH CURRENT USER'S ID TO THE POST'S LIKES ARRAY
-    // .put(authCtrl.requireSignin, postCtrl.like)
-    .put(asyncMiddleware(postCtrl.like))
+    .put(authCtrl.requireSignin, asyncMiddleware(postCtrl.like))
+    // .put(asyncMiddleware(postCtrl.like))
 
 router.route('/posts/unlike')
     // PUT - PULL CURRENT USER'S ID FROM THE POST'S LIKES ARRAY
-    // .put(authCtrl.requireSignin, postCtrl.unlike)
-    .put(asyncMiddleware(postCtrl.unlike))
+    .put(authCtrl.requireSignin, asyncMiddleware(postCtrl.unlike))
+    // .put(asyncMiddleware(postCtrl.unlike))
 
 //* -------------------------------------------------------------------------- */
 //*                  ROUTE - /posts/comment ~ /posts/uncomment                 */
 //* -------------------------------------------------------------------------- */
 router.route('/posts/comment')
     // PUT - PUSH CURRENT USER'S COMMENT + ID TO THE POST'S COMMENTS ARRAY
-    // .put(authCtrl.requireSignin, postCtrl.comment)
-    .put(asyncMiddleware(postCtrl.comment))
+    .put(authCtrl.requireSignin, asyncMiddleware(postCtrl.comment))
+    // .put(asyncMiddleware(postCtrl.comment))
 
 router.route('/posts/uncomment')
     // PUT - PULL CURRENT USER'S COMMENT + ID FROM THE POST'S COMMENTS ARRAY
-    // .put(authCtrl.requireSignin, postCtrl.uncomment)
-    .put(asyncMiddleware(postCtrl.uncomment))
+    .put(authCtrl.requireSignin, asyncMiddleware(postCtrl.uncomment))
+    // .put(asyncMiddleware(postCtrl.uncomment))
 
 //* -------------------------------------------------------------------------- */
 //*                           ROUTE - /posts/:postId                           */

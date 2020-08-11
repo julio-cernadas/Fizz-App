@@ -67,6 +67,7 @@ export default function EditProfile({ match }) {
     })
     const jwt = auth.isAuthenticated()
 
+    //* INITIAL GET REQUEST TO READ USER PROFILE DATA AND SET 'VALUES'.
     useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
@@ -94,6 +95,7 @@ export default function EditProfile({ match }) {
         }
     }, [match.params.userId])
 
+    //* ON CLICK, MAKE PUT REQUEST TO UPDATE USER PROFILE DATA.
     const clickSubmit = () => {
         let userData = new FormData()
         values.name && userData.append('name', values.name)
@@ -113,17 +115,18 @@ export default function EditProfile({ match }) {
             })
     }
 
+    //* CLASSICAL HANDLE CHANGE WITH PHOTO SET CONDITION.
     const handleChange = (name) => (event) => {
-        // If param is 'photo', then set value to file
-        const value =
-            (name === "photo") ? event.target.files[0] : event.target.value;
+        const value = (name === "photo") ? event.target.files[0] : event.target.value;
         setValues({ ...values, [name]: value });
     };
 
+    //* GRAB LATEST USER PROFILE PHOTO.
     const photoUrl = values.id
         ? `/api/v1/users/photos/${values.id}?${new Date().getTime()}`
         : "/api/v1/users/photos/defaultphoto";
 
+    //* REDIRECT TO '/USER' TO PAGE IF NECESSARY
     if (values.redirectToProfile) {
         return <Redirect to={"/user/" + values.id} />;
     }

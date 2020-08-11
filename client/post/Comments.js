@@ -94,7 +94,7 @@ export default function Comments (props) {
     return (<div>
         <CardHeader
               avatar={
-                <Avatar className={classes.smallAvatar} src={'/api/users/photo/'+auth.isAuthenticated().user._id}/>
+                <Avatar className={classes.smallAvatar} src={'/api/v1/users/photos/'+auth.isAuthenticated().user._id}/>
               }
               title={ <TextField
                 onKeyDown={addComment}
@@ -110,7 +110,7 @@ export default function Comments (props) {
         { props.comments.map((item, i) => {
             return <CardHeader
                       avatar={
-                        <Avatar className={classes.smallAvatar} src={'/api/users/photo/'+item.postedBy._id}/>
+                        <Avatar className={classes.smallAvatar} src={'/api/v1/users/photos/'+item.postedBy._id}/>
                       }
                       title={commentBody(item)}
                       className={classes.cardHeader}

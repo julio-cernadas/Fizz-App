@@ -107,7 +107,7 @@ export default function Signup() {
             }
         });
     };
-
+/* -------------------------------------------------------------------------- */
     return (
         <div className={classes.background}>
             <Card className={classes.card}>
@@ -115,34 +115,14 @@ export default function Signup() {
                     <Typography variant="h6" className={classes.title}>
                         JOIN THE FUN!
                     </Typography>
-                    <TextField
-                        id="name"
-                        label="Name"
-                        className={classes.textField}
-                        value={values.name}
-                        onChange={handleChange("name")}
-                        margin="normal"
-                    />
+                    <TextField id="name" label="Name" className={classes.textField}
+                        value={values.name} onChange={handleChange("name")} margin="normal" />
                     <br />
-                    <TextField
-                        id="email"
-                        type="email"
-                        label="Email"
-                        className={classes.textField}
-                        value={values.email}
-                        onChange={handleChange("email")}
-                        margin="normal"
-                    />
+                    <TextField id="email" type="email" label="Email" className={classes.textField}
+                        value={values.email} onChange={handleChange("email")} margin="normal" />
                     <br />
-                    <TextField
-                        id="password"
-                        type="password"
-                        label="Password"
-                        className={classes.textField}
-                        value={values.password}
-                        onChange={handleChange("password")}
-                        margin="normal"
-                    />
+                    <TextField id="password" type="password" label="Password" className={classes.textField}
+                        value={values.password} onChange={handleChange("password")} margin="normal" />
                     <br />
                     {/* ERROR MESSAGE POP UP ON BOTTOM */}
                     {values.error && (
@@ -155,12 +135,8 @@ export default function Signup() {
                     )}
                 </CardContent>
                 <CardActions>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={clickSubmit}
-                        className={classes.submit}
-                    >
+                    <Button color="primary" variant="contained"
+                        onClick={clickSubmit} className={classes.submit} >
                         Submit
                     </Button>
                 </CardActions>
@@ -185,12 +161,8 @@ export default function Signup() {
                 </DialogContent>
                 <DialogActions>
                     <Link to="/signin">
-                        <Button
-                            className={classes.button}
-                            color="primary"
-                            autoFocus="autoFocus"
-                            variant="contained"
-                        >
+                        <Button className={classes.button} color="primary"
+                            autoFocus="autoFocus" variant="contained" >
                             Sign In
                         </Button>
                     </Link>
