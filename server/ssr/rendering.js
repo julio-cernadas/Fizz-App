@@ -7,7 +7,6 @@ import ReactDOMServer from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 
 // Front End files...
-import Menu from './../../client/core/Menu'
 import Router from './../../client/Router'
 import theme from './../../client/theme'
 import template from './template'
@@ -59,7 +58,6 @@ export default function (app) {
                     <ThemeProvider theme={theme}>
                         <CssBaseline />
                         <Container disableGutters={true} maxWidth={false}>
-                            <Menu />
                             <Router />
                         </Container>
                     </ThemeProvider>

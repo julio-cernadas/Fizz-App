@@ -1,13 +1,14 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 
-import Home from './core/Home'
-import Users from './user/Users'
-import Signup from './user/Signup'
-import EditProfile from './user/EditProfile'
-import Profile from './user/Profile'
-import Signin from './auth/Signin'
-import PrivateRoute from './auth/PrivateRoute'
+import Menu from "./common/Menu";
+import Home from "./core/Home";
+import Users from "./user/Users";
+import Signup from "./user/Signup";
+import EditProfile from "./user/EditProfile";
+import Profile from "./user/Profile";
+import Signin from "./auth/Signin";
+import PrivateRoute from "./auth/PrivateRoute";
 
 //* -------------------------------------------------------------------------- */
 //*                                 EXPLANATION                                */
@@ -26,17 +27,23 @@ import PrivateRoute from './auth/PrivateRoute'
 
 const Router = () => {
     return (
-        <main>
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/users" component={Users} />
-                <Route path="/signup" component={Signup} />
-                <Route path="/signin" component={Signin} />
-                <Route exact path="/user/:userId" component={Profile} />
-                <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
-            </Switch>
-        </main>
+        <React.Fragment>
+            <Menu />
+            <main>
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/users" component={Users} />
+                    <Route path="/signup" component={Signup} />
+                    <Route path="/signin" component={Signin} />
+                    <Route exact path="/user/:userId" component={Profile} />
+                    <PrivateRoute
+                        path="/user/edit/:userId"
+                        component={EditProfile}
+                    />
+                </Switch>
+            </main>
+        </React.Fragment>
     );
-}
+};
 
-export default Router
+export default Router;

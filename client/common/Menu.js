@@ -10,7 +10,6 @@ import Button from "@material-ui/core/Button";
 import auth from "./../auth/auth-helper";
 import logo from "./../assets/images/logo_white.png"
 
-
 // To indicate the current location of the application on the Menu, we will
 // highlight the link that matches the current location path by changing the
 // color conditionally. This will be called for each menu item's style property!
@@ -83,5 +82,7 @@ const Menu = withRouter(({ history }) => (
         </Toolbar>
     </AppBar>
 ));
+
+
 
 export default Menu;

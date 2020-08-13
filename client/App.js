@@ -6,7 +6,6 @@ import { Container } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Menu from './core/Menu'
 import Router from "./Router";
 import theme from "./theme";
 
@@ -42,7 +41,6 @@ const App = () => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <Container disableGutters={true} maxWidth={false}>
-                    <Menu />
                     <Router />
                 </Container>
             </ThemeProvider>
