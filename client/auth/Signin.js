@@ -14,7 +14,7 @@ import { CardMedia } from "@material-ui/core";
 import auth from "./../auth/auth-helper";
 import { signin } from "./api-auth.js";
 
-import logo from "./../assets/logo.png"
+import logo from "./../assets/images/logo.png"
 import backgroundImg from "./../assets/images/background2.jpg"
 
 const useStyles = makeStyles((theme) => ({

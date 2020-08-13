@@ -8,7 +8,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import Button from "@material-ui/core/Button";
 
 import auth from "./../auth/auth-helper";
-import logo from "./../assets/logo_white.png"
+import logo from "./../assets/images/logo_white.png"
 
 
 // To indicate the current location of the application on the Menu, we will

@@ -7,15 +7,15 @@ import ReactDOMServer from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 
 // Front End files...
-import MainRouter from './../../client/MainRouter'
+import Menu from './../../client/core/Menu'
+import Router from './../../client/Router'
 import theme from './../../client/theme'
 import template from './template'
 
 // Material Styling Purposes...
+import { Container } from "@material-ui/core";
 import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline';
-
-import log from "./../../utils/webpack-logger"
 
 const CURRENT_WORKING_DIR = process.cwd()
 
@@ -54,20 +54,21 @@ export default function (app) {
         const markup = ReactDOMServer.renderToString(
             sheets.collect(
                 // StaticRouter is a stateless router that takes the requested URL to match
-                // with the frontend route that was declared in the MainRouter component.
+                // with the frontend route that was declared in the Router component.
                 <StaticRouter location={req.url} context={context}>
                     <ThemeProvider theme={theme}>
                         <CssBaseline />
-                        <MainRouter />
+                        <Container disableGutters={true} maxWidth={false}>
+                            <Menu />
+                            <Router />
+                        </Container>
                     </ThemeProvider>
                 </StaticRouter>
             )
         )
 
-        // log.debug("context:", context)
         // check if the app was redirected
         if (context.url) {
-            // log.debug(context.url)
             return res.redirect(303, context.url)
         }
 

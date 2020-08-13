@@ -2,10 +2,12 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { hot } from "react-hot-loader";
 
+import { Container } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import MainRouter from "./MainRouter";
+import Menu from './core/Menu'
+import Router from "./Router";
 import theme from "./theme";
 
 //* -------------------------------------------------------------------------- */
@@ -20,28 +22,29 @@ import theme from "./theme";
 // with a customized Material-UI theme, enables frontend routing, and ensures that
 // the React Hot Loader can instantly load changes as we develop the components.
 
-// Here wrap the MainRouter component with ThemeProvider, which gives it access to
+// Here wrap the 'Router' component with ThemeProvider, which gives it access to
 // the Material-UI theme, and BrowserRouter, which enables frontend routing with React
 // Router. The custom theme variables we defined previously are passed as a prop to
 // ThemeProvider, making the theme available in all our custom React components.
 
+// BrowserRouter is the router implementation that uses the HTML5 history API to
+// keep your UI up to date with the browser URL. It's responsibility is to store
+// all the components and its routes as an object.
+
 const App = () => {
-    // To run the function given to 'useEffect' only once after the initial render,
-    // you can give it an empty array as second argument.
     React.useEffect(() => {
         const jssStyles = document.querySelector("#jss-server-side");
         if (jssStyles) jssStyles.parentNode.removeChild(jssStyles);
     }, []);
 
-    // BrowserRouter is the router implementation that uses the HTML5 history API to
-    // keep your UI up to date with the browser URL. It's responsibility is to store
-    // all the components and its routes as an object.
     return (
         <BrowserRouter>
-            {/* Load theme from Material UI, importing settings from theme.js */}
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <MainRouter />
+                <Container disableGutters={true} maxWidth={false}>
+                    <Menu />
+                    <Router />
+                </Container>
             </ThemeProvider>
         </BrowserRouter>
     );

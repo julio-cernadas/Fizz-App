@@ -14,7 +14,11 @@ import App from './App'
 // the React frontend views.
 // https://medium.com/@akakankur81a-quick-overview-on-react-dom-render-and-hydrate-6d0ec6c1b234
 
-hydrate(<App />, document.getElementById('root'))
-// This is used to re-render a react app that was already server side rendered.
+hydrate(
+    <App />,
+    document.getElementById('root')
+)
+
+// So we re-render a react app that was already server side rendered.
 // This will serve as the entry point to render the complete React app, as
 // indicated in the client-side Webpack configuration
