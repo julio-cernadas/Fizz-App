@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from 'react'
-import {makeStyles} from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-import auth from './../auth/auth-helper'
-import PostList from './PostList'
-import {listNewsFeed} from './api-post.js'
-import NewPost from './NewPost'
+import React, { useState, useEffect } from "react";
+
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+
+import NewPost from "./../../../../../components/NewPost/NewPost";
+import PostList from "./../../../../../components/PostList/PostList";
+import auth from "./../../../../../services/auth/auth-helper";
+import { listNewsFeed } from "./../../../../../services/api/posts/api-post.js";
 
 const useStyles = makeStyles(theme => ({
   card: {

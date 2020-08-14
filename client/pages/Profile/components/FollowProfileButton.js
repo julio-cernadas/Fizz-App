@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import Button from "@material-ui/core/Button";
 
-import { unfollow, follow } from "./api-user.js";
+import { unfollow, follow } from "./../../../services/api/users/api-user.js";
 
 export default function FollowProfileButton(props) {
     const followClick = () => {

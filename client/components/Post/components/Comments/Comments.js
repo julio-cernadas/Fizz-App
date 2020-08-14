@@ -1,13 +1,15 @@
-import React, {useState} from 'react'
-import auth from './../auth/auth-helper'
-import CardHeader from '@material-ui/core/CardHeader'
-import TextField from '@material-ui/core/TextField'
-import Avatar from '@material-ui/core/Avatar'
-import Icon from '@material-ui/core/Icon'
-import PropTypes from 'prop-types'
-import {makeStyles} from '@material-ui/core/styles'
-import {comment, uncomment} from './api-post.js'
-import {Link} from 'react-router-dom'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { makeStyles } from "@material-ui/core/styles";
+import CardHeader from "@material-ui/core/CardHeader";
+import TextField from "@material-ui/core/TextField";
+import Avatar from "@material-ui/core/Avatar";
+import Icon from "@material-ui/core/Icon";
+
+import { comment, uncomment } from "./../../../../services/api/posts/api-post.js";
+import auth from "./../../../../services/auth/auth-helper";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles(theme => ({
   cardHeader: {

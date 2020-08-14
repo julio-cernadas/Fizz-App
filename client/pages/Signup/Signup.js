@@ -15,9 +15,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import { create } from "./api-user.js";
+import { create } from "./../../services/api/users/api-user.js";
 
-import backgroundImg from "./../assets/images/background3.jpg";
+import backgroundImg from "./../../assets/images/background3.jpg";
 
 const useStyles = makeStyles((theme) => ({
     background: {

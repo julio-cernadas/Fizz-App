@@ -6,8 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import FollowGrid from "./../user/FollowGrid";
-import PostList from "./../post/PostList";
+import FollowGrid from "./components/FollowGrid";
+import PostList from "./../../../../components/PostList/PostList";
 
 export default function ProfileTabs(props) {
     const [tab, setTab] = useState(0);

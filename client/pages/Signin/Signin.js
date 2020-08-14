@@ -11,11 +11,11 @@ import Icon from "@material-ui/core/Icon";
 import { makeStyles } from "@material-ui/core/styles";
 import { CardMedia } from "@material-ui/core";
 
-import auth from "./../auth/auth-helper";
-import { signin } from "./api-auth.js";
+import auth from "./../../services/auth/auth-helper";
+import { signin } from "./../../services/auth/api-auth.js";
 
-import logo from "./../assets/images/logo.png"
-import backgroundImg from "./../assets/images/background2.jpg"
+import logo from "./../../assets/images/logo.png"
+import backgroundImg from "./../../assets/images/background2.jpg"
 
 const useStyles = makeStyles((theme) => ({
     background: {

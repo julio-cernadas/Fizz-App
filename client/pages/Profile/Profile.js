@@ -14,12 +14,12 @@ import Typography from "@material-ui/core/Typography";
 import Edit from "@material-ui/icons/Edit";
 import Divider from "@material-ui/core/Divider";
 
-import FollowProfileButton from './../user/FollowProfileButton'
-import ProfileTabs from './../user/ProfileTabs'
-import DeleteUser from "./DeleteUser";
-import auth from "./../auth/auth-helper";
-import {listByUser} from './../post/api-post.js'
-import { read } from "./api-user.js";
+import FollowProfileButton from "./components/FollowProfileButton";
+import ProfileTabs from "./components/ProfileTabs/ProfileTabs";
+import DeleteUser from "./components/DeleteUser";
+import auth from "./../../services/auth/auth-helper";
+import { listByUser } from "./../../services/api/posts/api-post.js";
+import { read } from "./../../services/api/users/api-user.js";
 
 const useStyles = makeStyles(theme => ({
     root: theme.mixins.gutters({

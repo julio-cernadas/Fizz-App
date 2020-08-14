@@ -7,10 +7,10 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Grid from '@material-ui/core/Grid'
 
-import auth from "./../auth/auth-helper";
-import FindPeople from "./../user/FindPeople";
-import Newsfeed from "./../post/Newsfeed";
-import backgroundImg from "./../assets/images/wallpaper.jpg";
+import auth from "./../../services/auth/auth-helper";
+import FindPeople from "./scenes/UserHome/components/FindPeople";
+import Newsfeed from "./scenes/UserHome/components/Newsfeed";
+import backgroundImg from "./../../assets/images/wallpaper.jpg";
 
 const useStyles = makeStyles((theme) => ({
     root: {

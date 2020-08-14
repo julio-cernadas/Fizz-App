@@ -2,13 +2,13 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 
 import Menu from "./common/Menu";
-import Home from "./core/Home";
-import Users from "./user/Users";
-import Signup from "./user/Signup";
-import EditProfile from "./user/EditProfile";
-import Profile from "./user/Profile";
-import Signin from "./auth/Signin";
-import PrivateRoute from "./auth/PrivateRoute";
+import Home from "./pages/Home/Home";
+import Users from "./pages/Users/Users";
+import Signup from "./pages/Signup/Signup";
+import Signin from "./pages/Signin/Signin";
+import Profile from "./pages/Profile/Profile";
+import EditProfile from "./pages/EditProfile/EditProfile";
+import PrivateRoute from "./services/auth/PrivateRoute";
 
 //* -------------------------------------------------------------------------- */
 //*                                 EXPLANATION                                */

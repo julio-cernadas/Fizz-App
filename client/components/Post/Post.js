@@ -1,22 +1,24 @@
-import React, {useState, useEffect} from 'react'
-import auth from './../auth/auth-helper'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import CardActions from '@material-ui/core/CardActions'
-import Typography from '@material-ui/core/Typography'
-import Avatar from '@material-ui/core/Avatar'
-import IconButton from '@material-ui/core/IconButton'
-import DeleteIcon from '@material-ui/icons/Delete'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import CommentIcon from '@material-ui/icons/Comment'
-import Divider from '@material-ui/core/Divider'
-import PropTypes from 'prop-types'
-import {makeStyles} from '@material-ui/core/styles'
-import {Link} from 'react-router-dom'
-import {remove, like, unlike} from './api-post.js'
-import Comments from './Comments'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import CommentIcon from "@material-ui/icons/Comment";
+import Divider from "@material-ui/core/Divider";
+import { makeStyles } from "@material-ui/core/styles";
+
+import Comments from "./components/Comments/Comments";
+import { remove, like, unlike } from "./../../services/api/posts/api-post.js";
+import auth from "./../../services/auth/auth-helper";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles(theme => ({
   card: {

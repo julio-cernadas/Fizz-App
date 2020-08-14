@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import ArrowForward from "@material-ui/icons/ArrowForward";
 import Person from "@material-ui/icons/Person";
 
-import { list } from "./api-user.js";
+import { list } from "./../../services/api/users/api-user.js";
 
 //* -------------------------------------------------------------------------- */
 //*                                 EXPLANATION                                */
